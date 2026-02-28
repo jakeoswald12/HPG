@@ -193,8 +193,8 @@
     position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(80px);
     background: var(--text); color: #fff;
-    padding: 13px 26px; border-radius: 100px;
-    font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg);
+    padding: 26px 52px; border-radius: 100px;
+    font-size: 28px; font-weight: 500; box-shadow: var(--shadow-lg);
     transition: transform .4s cubic-bezier(.25,.46,.45,.94);
     z-index: 200; pointer-events: none;
   }
@@ -615,7 +615,7 @@ $('modalSave').onclick = async () => {
 function toast(msg) {
   $('toast').textContent = msg;
   $('toast').classList.add('show');
-  setTimeout(() => $('toast').classList.remove('show'), 2800);
+  setTimeout(() => $('toast').classList.remove('show'), 5600);
 }
 function esc(s) {
   if (!s) return '';
