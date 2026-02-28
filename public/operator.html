@@ -229,6 +229,22 @@
     padding: 4px 10px; border-radius: 100px;
     font-size: 11px; font-weight: 600; margin-top: 6px;
   }
+
+  /* ─── Check-in button loading state ─── */
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .btn-success.loading {
+    opacity: 0.85; cursor: not-allowed; pointer-events: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-success.loading::before {
+    content: '';
+    width: 14px; height: 14px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
 </style>
 </head>
 <body>
@@ -482,6 +498,13 @@ $('saveBtn').onclick = async () => {
 
 // ─── Check In (save + assign buyer # + write to Sheets) ─────
 $('checkinBtn').onclick = async () => {
+  const btn = $('checkinBtn');
+  const originalText = btn.textContent;
+
+  // Show loading state
+  btn.classList.add('loading');
+  btn.textContent = 'Processing…';
+
   const data = getEditFields();
 
   // 1. Save to CRM first
@@ -518,6 +541,8 @@ $('checkinBtn').onclick = async () => {
       const errMsg = sheetsData.error || 'unknown error';
       console.error('Sheets write failed:', sheetsData);
       toast('Check-in failed — ' + errMsg);
+      btn.classList.remove('loading');
+      btn.textContent = originalText;
       return;
     }
 
@@ -527,6 +552,8 @@ $('checkinBtn').onclick = async () => {
       const parsed = JSON.parse(sheetsData.response);
       if (parsed.error) {
         toast('Check-in failed — ' + parsed.error);
+        btn.classList.remove('loading');
+        btn.textContent = originalText;
         return;
       }
       buyerNum = parsed.buyerNumber;
@@ -543,10 +570,14 @@ $('checkinBtn').onclick = async () => {
 
     $('editPanel').classList.remove('visible');
     selectedIdx = -1;
+    btn.classList.remove('loading');
+    btn.textContent = originalText;
     await doSearch();
   } catch(e) {
     console.error('Check-in error:', e);
     toast('Check-in error — try again');
+    btn.classList.remove('loading');
+    btn.textContent = originalText;
   }
 };
 
