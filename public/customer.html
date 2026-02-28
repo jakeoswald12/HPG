@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome — Bull Sale Check-In</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #f5f5f7;
+    --card-bg: #ffffff;
+    --text: #1d1d1f;
+    --text-secondary: #86868b;
+    --accent: #0071e3;
+    --success: #30d158;
+    --success-bg: #e8f7ed;
+    --border: #d2d2d7;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 36px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .logo-area { height: 30px; flex-shrink: 0; }
+  .logo-area img { height: 100%; width: auto; display: block; }
+
+  /* ─── Main ─── */
+  .main { max-width: 920px; margin: 0 auto; padding: 36px 28px; }
+
+  /* ─── States ─── */
+  .state { display: none; }
+  .state.active { display: block; }
+
+  /* ─── Welcome ─── */
+  .welcome { text-align: center; padding: 100px 20px; animation: fadeIn .6s ease; }
+  .welcome-icon { font-size: 72px; margin-bottom: 16px; }
+  .welcome-title { font-size: 32px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 8px; }
+  .welcome-sub { font-size: 18px; color: var(--text-secondary); max-width: 420px; margin: 0 auto; line-height: 1.5; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── Searching ─── */
+  .searching { text-align: center; padding: 80px 20px; }
+  .searching-label { font-size: 18px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+  .searching-name { font-size: 32px; font-weight: 700; color: var(--accent); margin-bottom: 20px; letter-spacing: -.5px; }
+  .dots span {
+    display: inline-block; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%; margin: 0 5px;
+    animation: bounce 1.2s ease infinite;
+  }
+  .dots span:nth-child(2) { animation-delay: .2s; }
+  .dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-14px)} }
+
+  /* ─── Results ─── */
+  .results-header { text-align: center; margin-bottom: 28px; }
+  .results-query { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  .results-title { font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
+  .results-instruction { font-size: 15px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
+
+  /* ─── Card ─── */
+  .card {
+    background: var(--card-bg); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow); padding: 28px; margin-bottom: 18px;
+    display: flex; gap: 24px; align-items: flex-start;
+    border: 2.5px solid transparent;
+    transition: all .4s cubic-bezier(.25,.46,.45,.94);
+    opacity: 0; transform: translateY(14px) scale(.98);
+    animation: cardIn .5s ease forwards;
+  }
+  .card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(0,113,227,.1), var(--shadow-lg);
+    transform: scale(1.01);
+  }
+  @keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .card-num {
+    width: 68px; height: 68px; border-radius: 50%;
+    background: var(--text); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; flex-shrink: 0;
+    transition: all .3s ease;
+  }
+  .card.selected .card-num { background: var(--accent); transform: scale(1.06); }
+
+  .card-body { flex: 1; min-width: 0; }
+  .card-name { font-size: 22px; font-weight: 700; letter-spacing: -.4px; margin-bottom: 3px; }
+  .card-biz { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .detail-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+  .detail-value { font-size: 16px; font-weight: 500; word-break: break-word; margin-top: 2px; }
+  .detail-value.empty { color: var(--border); font-style: italic; font-weight: 400; }
+
+  /* ─── No results ─── */
+  .no-results { text-align: center; padding: 56px 20px; }
+  .no-results-icon { font-size: 52px; margin-bottom: 12px; opacity: .3; }
+  .no-results-title { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .no-results-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ─── Checked-in confirmation ─── */
+  .checkin-confirm {
+    text-align: center; padding: 80px 20px;
+    animation: fadeIn .5s ease;
+  }
+  .checkin-icon { font-size: 64px; margin-bottom: 16px; }
+  .checkin-title { font-size: 28px; font-weight: 700; letter-spacing: -.4px; margin-bottom: 6px; }
+  .checkin-buyer-num {
+    display: inline-block; background: var(--text); color: #fff;
+    padding: 10px 32px; border-radius: 100px;
+    font-size: 24px; font-weight: 800; margin: 16px 0;
+    animation: popIn .4s ease;
+  }
+  .checkin-sub { font-size: 16px; color: var(--text-secondary); }
+
+  @keyframes popIn { 0%{transform:scale(.7);opacity:0} 100%{transform:scale(1);opacity:1} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-area"><img src="/logo.png" alt="High Point Genetics"></div>
+</header>
+
+<main class="main">
+  <!-- Welcome -->
+  <div class="state active" id="stateWelcome">
+    <div class="welcome">
+      <div class="welcome-icon">&#128004;</div>
+      <div class="welcome-title">Welcome to the Sale</div>
+      <div class="welcome-sub">Please give your name to the operator and we'll pull up your information to verify.</div>
+    </div>
+  </div>
+
+  <!-- Searching -->
+  <div class="state" id="stateSearching">
+    <div class="searching">
+      <div class="searching-label">Looking up</div>
+      <div class="searching-name" id="searchingName"></div>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="state" id="stateResults">
+    <div class="results-header">
+      <div class="results-query" id="rQuery"></div>
+      <div class="results-title" id="rTitle"></div>
+      <div class="results-instruction" id="rInstruction"></div>
+    </div>
+    <div id="cardsList"></div>
+  </div>
+
+  <!-- Checked-in confirmation -->
+  <div class="state" id="stateCheckedIn">
+    <div class="checkin-confirm">
+      <div class="checkin-icon">&#9989;</div>
+      <div class="checkin-title" id="ciName"></div>
+      <div class="checkin-buyer-num" id="ciBuyerNum"></div>
+      <div class="checkin-sub">You're all set. Enjoy the sale!</div>
+    </div>
+  </div>
+</main>
+
+<script>
+const channel = new BroadcastChannel('bull-sale-checkin');
+let currentResults = [];
+let selectedIndex = -1;
+
+function showState(id) {
+  document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+channel.addEventListener('message', e => {
+  const msg = e.data;
+
+  if (msg.type === 'search') {
+    currentResults = msg.results;
+    selectedIndex = -1;
+    const name = [msg.query.first, msg.query.last].filter(Boolean).join(' ');
+
+    // Show searching animation briefly
+    document.getElementById('searchingName').textContent = name;
+    showState('stateSearching');
+
+    setTimeout(() => {
+      showState('stateResults');
+      document.getElementById('rQuery').textContent = 'Results for "' + name + '"';
+
+      if (!currentResults.length) {
+        document.getElementById('rTitle').textContent = 'No records found';
+        document.getElementById('rInstruction').textContent = 'The operator will get your information set up right now.';
+        document.getElementById('cardsList').innerHTML = '<div class="no-results"><div class="no-results-icon">&#128203;</div><div class="no-results-title">No records on file</div><div class="no-results-sub">No worries — we\'ll get you added.</div></div>';
+      } else {
+        document.getElementById('rTitle').textContent = 'We found ' + currentResults.length + ' record' + (currentResults.length!==1?'s':'');
+        document.getElementById('rInstruction').textContent = 'Please tell the operator which number is yours and if anything needs to be updated.';
+        renderCards();
+      }
+    }, 700);
+  }
+
+  if (msg.type === 'selected') {
+    selectedIndex = msg.index;
+    renderCards();
+  }
+
+  if (msg.type === 'checked-in') {
+    const b = msg.buyer;
+    document.getElementById('ciName').textContent = 'Welcome, ' + b.firstName + '!';
+    document.getElementById('ciBuyerNum').textContent = 'Buyer #' + msg.buyerNumber;
+    showState('stateCheckedIn');
+
+    // Auto-return to welcome after 8 seconds
+    setTimeout(() => showState('stateWelcome'), 8000);
+  }
+});
+
+function renderCards() {
+  const el = document.getElementById('cardsList');
+  el.innerHTML = currentResults.map((c, i) => {
+    const addr = [c.Address, [c.City, c.State, c.Zip].filter(Boolean).join(', ')].filter(Boolean).join('<br>') || '<span class="detail-value empty">Not on file</span>';
+    const email = extractEmail(c);
+    return `
+    <div class="card ${selectedIndex===i?'selected':''}" style="animation-delay:${i*.1}s">
+      <div class="card-num">${i+1}</div>
+      <div class="card-body">
+        <div class="card-name">${esc(c['First Name'])} ${esc(c['Last Name'])}</div>
+        <div class="card-biz">${c.Business ? esc(c.Business) : ''}</div>
+        <div class="card-grid">
+          <div><div class="detail-label">Address</div><div class="detail-value">${addr}</div></div>
+          <div><div class="detail-label">Phone</div><div class="detail-value ${c.Phone?'':'empty'}">${esc(c.Phone)||'Not on file'}</div></div>
+          <div><div class="detail-label">Email</div><div class="detail-value ${email?'':'empty'}">${esc(email)||'Not on file'}</div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function extractEmail(c) {
+  if (c.Email) return c.Email;
+  const misc = c.Miscellaneous || '';
+  const m = misc.match(/[\w.-]+@[\w.-]+\.\w+/);
+  return m ? m[0] : '';
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+
+</body>
+</html>
