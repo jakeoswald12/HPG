@@ -254,7 +254,6 @@
     <div class="logo-area"><img src="/logo.png" alt="High Point Genetics"></div>
   </div>
   <div class="header-right">
-    <div class="badge" id="checkinCount">0 checked in</div>
     <button class="settings-btn" id="settingsBtn" title="Settings">&#9881;</button>
   </div>
 </header>
@@ -356,7 +355,6 @@ let results = [];
 let selectedIdx = -1;
 let editingRowIndex = null;
 let isNew = false;
-let totalCheckedIn = 0;
 
 const $ = id => document.getElementById(id);
 
@@ -561,8 +559,6 @@ $('checkinBtn').onclick = async () => {
       console.error('Could not parse sheets response:', sheetsData.response);
     }
 
-    totalCheckedIn++;
-    $('checkinCount').textContent = totalCheckedIn + ' checked in';
     toast('Checked in as Buyer #' + buyerNum);
 
     // Broadcast to customer screen
@@ -626,11 +622,6 @@ function esc(s) {
 
 $('firstName').focus();
 
-// Load current check-in count
-fetch('/api/checkin/list').then(r=>r.json()).then(list => {
-  totalCheckedIn = list.length;
-  $('checkinCount').textContent = totalCheckedIn + ' checked in';
-});
 </script>
 
 </body>
