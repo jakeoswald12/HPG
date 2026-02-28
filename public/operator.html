@@ -12,8 +12,8 @@
     --card-bg: #ffffff;
     --text: #1d1d1f;
     --text-secondary: #86868b;
-    --accent: #0071e3;
-    --accent-hover: #0077ed;
+    --accent: #1d1d1f;
+    --accent-hover: #3a3a3c;
     --success: #30d158;
     --success-bg: #e8f7ed;
     --danger: #ff3b30;
@@ -87,7 +87,7 @@
     font-size: 15px; font-family: inherit;
     transition: all .2s; outline: none; background: var(--bg);
   }
-  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,.12); background: #fff; }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,.08); background: #fff; }
 
   .search-btn {
     margin-top: 16px; width: 100%; padding: 13px;
@@ -95,7 +95,7 @@
     border-radius: var(--radius); font-size: 15px; font-weight: 600;
     font-family: inherit; cursor: pointer; transition: all .2s;
   }
-  .search-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,113,227,.25); }
+  .search-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
   .search-btn:active { transform: translateY(0); }
 
   /* ─── Results ─── */
@@ -122,7 +122,7 @@
     animation: fadeUp .35s ease forwards;
   }
   .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-  .card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,.12), var(--shadow-lg); }
+  .card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,.08), var(--shadow-lg); }
 
   @keyframes fadeUp { to { opacity:1; transform: translateY(0); } }
 
@@ -175,7 +175,7 @@
     font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
     transition: all .2s;
   }
-  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,113,227,.25); }
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
 
   .btn-success {
     padding: 11px 28px; background: var(--success); color: #fff;
