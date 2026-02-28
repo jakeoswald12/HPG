@@ -36,19 +36,16 @@
 
   /* ─── Header ─── */
   .header {
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 28px;
+    background: transparent;
+    padding: 20px 28px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: sticky; top: 0; z-index: 100;
   }
-  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-left { display: flex; align-items: center; }
 
-  .logo-area { height: 30px; flex-shrink: 0; }
+  .logo-area { height: 60px; flex-shrink: 0; }
   .logo-area img { height: 100%; width: auto; display: block; }
 
   .header-text .title { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
@@ -252,9 +249,6 @@
 <header class="header">
   <div class="header-left">
     <div class="logo-area"><img src="/logo.png" alt="High Point Genetics"></div>
-  </div>
-  <div class="header-right">
-    <button class="settings-btn" id="settingsBtn" title="Settings">&#9881;</button>
   </div>
 </header>
 
@@ -592,20 +586,6 @@ function getEditFields() {
   };
 }
 
-// ─── Settings modal ──────────────────────────────────
-$('settingsBtn').onclick = async () => {
-  const res = await fetch('/api/config/sheets-url');
-  const { url } = await res.json();
-  $('sheetsUrl').value = url || '';
-  $('modalOverlay').classList.add('visible');
-};
-$('modalCancel').onclick = () => $('modalOverlay').classList.remove('visible');
-$('modalSave').onclick = async () => {
-  const url = $('sheetsUrl').value.trim();
-  await fetch('/api/config/sheets-url', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url }) });
-  $('modalOverlay').classList.remove('visible');
-  toast(url ? 'Sheets URL saved' : 'Sheets URL cleared');
-};
 
 // ─── Helpers ─────────────────────────────────────────
 function toast(msg) {
